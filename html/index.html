@@ -1,0 +1,23 @@
+<script src="https://cdn.socket.io/4.6.0/socket.io.min.js" 
+integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" 
+crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+
+const socket = io("https://ec2-3-110-196-1.ap-south-1.compute.amazonaws.com:5000/");
+
+navigator.mediaDevices.getUserMedia({audio: true,video: {facingMode: 'environment'}
+}).then((stream) => {
+	
+	const recorder = new MediaRecorder(stream);
+        recorder.ondataavailable = event => {
+            const blob = event.data;
+			socket.emit("buffer",blob);
+        };
+
+        recorder.start(1000);
+		
+}).catch((error) => {
+	console.log(error);
+});
+  </script>
